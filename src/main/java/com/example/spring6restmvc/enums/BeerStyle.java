@@ -6,11 +6,6 @@ package com.example.spring6restmvc.enums;
  * @created : 2023/09/21, Thu, 10:01
  **/
 
-//public enum BeerStyle {
-//    LAGER, PILSNER, STOUT, GOSE, PORTER, ALE, WHEAT, IPA, PALE_ALE, SAISON
-//}
-
-
 public enum BeerStyle {
     LAGER(1),
     PILSNER(2),

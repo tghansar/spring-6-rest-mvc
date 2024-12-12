@@ -23,18 +23,23 @@ public class Customer {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @Column(length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
+    @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @Version
+    @Column(name = "version")
     private Integer version;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "surname")
     private String surname;
 
-//    @Column(columnDefinition = "timestamp")
+    @Column(name = "created_date", columnDefinition = "timestamp")
     private LocalDateTime createdDate;
 
-//    @Column(columnDefinition = "timestamp")
+    @Column(name = "update_date", columnDefinition = "timestamp")
     private LocalDateTime updateDate;
 }
 

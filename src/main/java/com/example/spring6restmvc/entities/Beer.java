@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ public class Beer {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @Column(length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
+    @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @Version
@@ -38,26 +39,30 @@ public class Beer {
     @NotBlank
     @NotNull
     @Size(max = 50) //bean validation constraint
-    @Column(length = 50) // database table configuration
+    @Column(name = "beer_name", length = 50) // database table configuration
     private String beerName;
 
     @Enumerated(EnumType.STRING)
+    @ColumnTransformer(write = "?::BEER_STYLE")
     @NotNull
+    @Column(name = "beer_style")
     private BeerStyle beerStyle;
 
     @NotBlank
     @NotNull
-//    @Column(nullable = false, unique = true)
+    @Column(name = "upc")
     private String upc;
+
+    @Column(name = "quantity_on_hand")
     private Integer quantityOnHand;
 
     @NotNull
-//    @Column(nullable = false)
+    @Column(name = "price")
     private BigDecimal price;
 
-//    @Column(columnDefinition = "timestamp", updatable = false)
+    @Column(name = "created_date", columnDefinition = "timestamp")
     private LocalDateTime createdDate;
 
-//    @Column(columnDefinition = "timestamp")
+    @Column(name = "update_date", columnDefinition = "timestamp")
     private LocalDateTime updateDate;
 }
