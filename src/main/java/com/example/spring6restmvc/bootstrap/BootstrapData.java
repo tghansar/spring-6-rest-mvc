@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -74,31 +73,34 @@ public class BootstrapData implements CommandLineRunner {
     private void loadCustomerData() {
 
         if (customerRepository.count() == 0) {
+            LocalDateTime now = LocalDateTime.now();
             Customer customer1 = Customer.builder()
                     .id(UUID.randomUUID())
                     .name("Customer 1")
                     .version(1)
-                    .createdDate(LocalDateTime.now())
-                    .updateDate(LocalDateTime.now())
+                    .createdDate(now)
+                    .updateDate(now)
                     .build();
 
             Customer customer2 = Customer.builder()
                     .id(UUID.randomUUID())
                     .name("Customer 2")
                     .version(1)
-                    .createdDate(LocalDateTime.now())
-                    .updateDate(LocalDateTime.now())
+                    .createdDate(now)
+                    .updateDate(now)
                     .build();
 
             Customer customer3 = Customer.builder()
                     .id(UUID.randomUUID())
                     .name("Customer 3")
                     .version(1)
-                    .createdDate(LocalDateTime.now())
-                    .updateDate(LocalDateTime.now())
+                    .createdDate(now)
+                    .updateDate(now)
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            customerRepository.save(customer1);
+            customerRepository.save(customer2);
+            customerRepository.save(customer3);
         }
 
     }

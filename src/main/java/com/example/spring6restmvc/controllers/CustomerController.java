@@ -36,7 +36,7 @@ public class CustomerController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "api/v1/customerDto" + savedCustomerDto.getId().toString());
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/{customerId}") //<- path variable
@@ -56,7 +56,7 @@ public class CustomerController {
 
         customerService.updateCustomerById(customerId, customerDto);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{customerId}")
@@ -64,7 +64,7 @@ public class CustomerController {
 
         customerService.deleteCustomerById(customerId);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = "/{customerId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -72,6 +72,6 @@ public class CustomerController {
 
         customerService.patchCustomerById(customerId, customerDto);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

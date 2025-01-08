@@ -24,6 +24,7 @@ public class Customer {
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
     @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
+//    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 
     @Version

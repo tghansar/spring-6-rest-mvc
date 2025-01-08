@@ -6,8 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.ColumnTransformer;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class Beer {
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
     @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
+//    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 
     @Version
@@ -43,7 +45,7 @@ public class Beer {
     private String beerName;
 
     @Enumerated(EnumType.STRING)
-    @ColumnTransformer(write = "?::BEER_STYLE")
+    @JdbcTypeCode(value = SqlTypes.SMALLINT)
     @NotNull
     @Column(name = "beer_style")
     private BeerStyle beerStyle;
