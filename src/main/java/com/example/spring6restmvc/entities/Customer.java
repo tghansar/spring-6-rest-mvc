@@ -34,6 +34,9 @@ public class Customer {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "email", length = 255)
+    private String email;
+
     @Column(name = "surname")
     private String surname;
 
