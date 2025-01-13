@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: 'mysql:17.2'
+    environment:
+      - 'POSTGRES_DATABASE=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_ROOT_PASSWORD=verysecret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '3306'
