@@ -3,15 +3,20 @@ package com.example.spring6restmvc.bootstrap;
 import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.entities.Customer;
 import com.example.spring6restmvc.enums.BeerStyle;
+import com.example.spring6restmvc.model.BeerCSVRecord;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.example.spring6restmvc.repositories.CustomerRepository;
+import com.example.spring6restmvc.services.BeerCSVService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,11 +30,43 @@ import java.util.UUID;
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
+    private final BeerCSVService beerCSVService;
 
     @Override
     public void run(String... args) {
         loadBeerData();
+        loadCSVData();
         loadCustomerData();
+    }
+
+    private void loadCSVData() {
+        if(beerRepository.count() < 10) {
+            File file = new File("classpath:csvdata/beers.csv");
+
+            List<BeerCSVRecord> records = beerCSVService.convertCsv(file);
+
+            records.forEach(record -> {
+                BeerStyle beerStyle = switch (record.getStyle()) {
+                    case "American Pale Lager" -> BeerStyle.LAGER;
+                    case "American Pale Ale (APA)", "American Black Ale", "Belgian Dark Ale", "American Blonde Ale" -> BeerStyle.ALE;
+                    case "American IPA", "American Double / Imperial IPA", "Belgian IPA" -> BeerStyle.IPA;
+                    case "American Porter" -> BeerStyle.PORTER;
+                    case "Oatmeal Stout", "American Stout" -> BeerStyle.STOUT;
+                    case "Saison / Farmhouse Ale" -> BeerStyle.SAISON;
+                    case "Fruit / Vegetable Beer", "Winter Warmer", "Berliner Weissbier" -> BeerStyle.WHEAT;
+                    case "English Pale Ale" -> BeerStyle.PALE_ALE;
+                    default -> BeerStyle.PILSNER;
+                };
+
+                beerRepository.save(Beer.builder()
+                        .beerName(StringUtils.abbreviate(record.getBeer(), 50))
+                        .beerStyle(beerStyle)
+                        .upc(record.getId().toString())
+                        .price(new BigDecimal(record.getAbv()))
+                        .quantityOnHand(record.getRow())
+                        .build());
+            });
+        }
     }
 
     private void loadBeerData() {
