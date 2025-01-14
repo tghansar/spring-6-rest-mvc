@@ -84,14 +84,14 @@ public class BeerControllerIntegrationTest {
     @Test
     void testListBeers() {
         List<BeerDto> beerList = beerController.listBeers();
-        Assertions.assertThat(beerList.size()).isEqualTo(3);
+        Assertions.assertThat(beerList.size()).isEqualTo(2413);
     }
 
 
     @Rollback
     @Transactional
     @Test
-    void testDeleteByIdFound() {
+    void testDeleteByIdFound() { // TODO: check if this test is correct
         Beer beer = beerRepository.findAll().get(0);
 
         ResponseEntity responseEntity = beerController.deleteById(beer.getId());

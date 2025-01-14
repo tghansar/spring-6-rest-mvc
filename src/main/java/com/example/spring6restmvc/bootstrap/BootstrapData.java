@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ public class BootstrapData implements CommandLineRunner {
     private final CustomerRepository customerRepository;
     private final BeerCSVService beerCSVService;
 
+    @Transactional
     @Override
     public void run(String... args) {
         loadBeerData();
@@ -41,7 +43,7 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadCSVData() {
         if(beerRepository.count() < 10) {
-            File file = new File("classpath:csvdata/beers.csv");
+            File file = new File("src/main/resources/csvdata/beers.csv");
 
             List<BeerCSVRecord> records = beerCSVService.convertCsv(file);
 
@@ -61,9 +63,9 @@ public class BootstrapData implements CommandLineRunner {
                 beerRepository.save(Beer.builder()
                         .beerName(StringUtils.abbreviate(record.getBeer(), 50))
                         .beerStyle(beerStyle)
-                        .upc(record.getId().toString())
-                        .price(new BigDecimal(record.getAbv()))
-                        .quantityOnHand(record.getRow())
+                        .price(BigDecimal.TEN)
+                        .upc(record.getRow().toString())
+                        .quantityOnHand(record.getCount())
                         .build());
             });
         }
