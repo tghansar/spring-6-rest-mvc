@@ -1,5 +1,7 @@
 package com.example.spring6restmvc.services;
 
+import com.example.spring6restmvc.entities.Beer;
+import com.example.spring6restmvc.enums.BeerStyle;
 import com.example.spring6restmvc.exception.NotFoundException;
 import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;
@@ -32,11 +34,38 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDto> listBeers() {
-        return beerRepository.findAll()
-                .stream()
+    public List<BeerDto> listBeers(String beerName, BeerStyle beerStyle) {
+        List<Beer> beerList;
+
+        if (StringUtils.hasText(beerName) && beerStyle != null) {
+            beerList = listBeersByBeerNameAndBeerStyle(beerName, beerStyle);
+
+        } else if (StringUtils.hasText(beerName)) {
+            beerList = listBeersByName(beerName);
+
+        } else if (beerStyle != null) {
+            beerList = listBeersByStyle(beerStyle);
+        }
+
+        else {
+            beerList = beerRepository.findAll();
+        }
+
+        return beerList.stream()
                 .map(beerMapper::beerToBeerDto)
                 .toList();
+    }
+
+    List<Beer> listBeersByName(String beerName) {
+        return beerRepository.findBeerByBeerNameLikeIgnoreCase("%" + beerName + "%");
+    }
+
+    List<Beer> listBeersByStyle(BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerStyle(beerStyle);
+    }
+
+    List<Beer> listBeersByBeerNameAndBeerStyle(String beerName, BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%", beerStyle);
     }
 
     @Override
@@ -117,9 +146,7 @@ public class BeerServiceJPA implements BeerService {
             }
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }

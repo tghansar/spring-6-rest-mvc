@@ -1,12 +1,12 @@
 package com.example.spring6restmvc.controllers;
 
 import com.example.spring6restmvc.entities.Beer;
+import com.example.spring6restmvc.enums.BeerStyle;
 import com.example.spring6restmvc.exception.NotFoundException;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -58,6 +62,30 @@ public class BeerControllerIntegrationTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
+    @Test
+    void testListBeersByName() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                .queryParam("beerName", "IPA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(336)));
+    }
+
+    @Test
+    void testListBeersByStyle() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(548)));
+    }
+
+    @Test
+    void testListBeersByNameAndStyle() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                .queryParam("beerName", "IPA")
+                .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(310)));
+    }
 
     @Test
     void testPatchBeerBadName() throws Exception {
@@ -72,7 +100,6 @@ public class BeerControllerIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test
@@ -83,8 +110,8 @@ public class BeerControllerIntegrationTest {
 
     @Test
     void testListBeers() {
-        List<BeerDto> beerList = beerController.listBeers();
-        Assertions.assertThat(beerList.size()).isEqualTo(2413);
+        List<BeerDto> beerList = beerController.listBeers(null, null);
+        assertThat(beerList.size()).isEqualTo(2413);
     }
 
 
@@ -95,9 +122,9 @@ public class BeerControllerIntegrationTest {
         Beer beer = beerRepository.findAll().get(0);
 
         ResponseEntity responseEntity = beerController.deleteById(beer.getId());
-        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        Assertions.assertThat(beerRepository.findById(beer.getId()).isEmpty());
+        assertThat(beerRepository.findById(beer.getId()).isEmpty());
     }
 
     @Test
@@ -111,8 +138,8 @@ public class BeerControllerIntegrationTest {
     @Test
     void testEmptyList() {
         beerRepository.deleteAll();
-        List<BeerDto> beerList = beerController.listBeers();
-        Assertions.assertThat(beerList.size()).isEqualTo(0);
+        List<BeerDto> beerList = beerController.listBeers(null, null);
+        assertThat(beerList.size()).isEqualTo(0);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.spring6restmvc.controllers;
 
+import com.example.spring6restmvc.enums.BeerStyle;
 import com.example.spring6restmvc.exception.NotFoundException;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.services.BeerService;
@@ -45,15 +46,14 @@ public class BeerController {
     @GetMapping("/{beerId}") //<- path variable
     public BeerDto getBeerById(@PathVariable("beerId") UUID beerId){
 
-        log.debug("BeerController.getBeerById() was called");
-
         return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping
-    public List<BeerDto> listBeers() {
+    public List<BeerDto> listBeers(@RequestParam(required = false) String beerName,
+                                   @RequestParam(required = false) BeerStyle beerStyle) {
 
-        return beerService.listBeers();
+        return beerService.listBeers(beerName, beerStyle);
     }
 
     @PutMapping("/{beerId}")
