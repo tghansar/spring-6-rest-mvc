@@ -51,9 +51,10 @@ public class BeerController {
 
     @GetMapping
     public List<BeerDto> listBeers(@RequestParam(required = false) String beerName,
-                                   @RequestParam(required = false) BeerStyle beerStyle) {
+                                   @RequestParam(required = false) BeerStyle beerStyle,
+                                   @RequestParam(required = false) boolean showInventory) {
 
-        return beerService.listBeers(beerName, beerStyle);
+        return beerService.listBeers(beerName, beerStyle, showInventory);
     }
 
     @PutMapping("/{beerId}")

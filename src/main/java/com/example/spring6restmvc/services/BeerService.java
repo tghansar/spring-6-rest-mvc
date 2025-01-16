@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface BeerService {
 
-    List<BeerDto> listBeers(String beerName, BeerStyle beerStyle);
+    List<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory);
 
     Optional<BeerDto> getBeerById(UUID id);
 
