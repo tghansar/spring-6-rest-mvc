@@ -3,9 +3,10 @@ package com.example.spring6restmvc.repositories;
 import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.enums.BeerStyle;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,9 +16,9 @@ import java.util.UUID;
  **/
 public interface BeerRepository extends JpaRepository <Beer, UUID> {
 
-    List<Beer> findBeerByBeerNameLikeIgnoreCase(@NotNull String beerName);
+    Page<Beer> findBeerByBeerNameLikeIgnoreCase(@NotNull String beerName, Pageable pageable);
 
-    List<Beer> findAllByBeerStyle(@NotNull BeerStyle beerStyle);
+    Page<Beer> findAllByBeerStyle(@NotNull BeerStyle beerStyle, Pageable pageable);
 
-    List<Beer> findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(@NotNull String beerName, @NotNull BeerStyle beerStyle);
+    Page<Beer> findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(@NotNull String beerName, @NotNull BeerStyle beerStyle, Pageable pageable);
 }

@@ -3,6 +3,8 @@ package com.example.spring6restmvc.services;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.enums.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -67,8 +69,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory) {
-        return new ArrayList<>(beerMap.values());
+    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+        return new PageImpl<>(new ArrayList<>(beerMap.values()));
     }
 
     @Override
@@ -127,14 +129,6 @@ public class BeerServiceImpl implements BeerService {
             existingBeerDto.setBeerName(beerDto.getBeerName());
         }
 
-        if (beerDto.getBeerStyle() != null) {
-            existingBeerDto.setBeerStyle(beerDto.getBeerStyle());
-        }
-
-        if (beerDto.getPrice() != null) {
-            existingBeerDto.setPrice(beerDto.getPrice());
-        }
-
         if (beerDto.getQuantityOnHand() != null) {
             existingBeerDto.setQuantityOnHand(beerDto.getQuantityOnHand());
         }
@@ -142,6 +136,11 @@ public class BeerServiceImpl implements BeerService {
         if (StringUtils.hasText(beerDto.getUpc())) {
             existingBeerDto.setUpc(beerDto.getUpc());
         }
+
+        existingBeerDto.setBeerStyle(beerDto.getBeerStyle());
+
+        existingBeerDto.setPrice(beerDto.getPrice());
+
         return Optional.empty();
     }
 }
