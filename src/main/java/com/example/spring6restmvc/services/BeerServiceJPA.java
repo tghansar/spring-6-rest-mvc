@@ -35,6 +35,7 @@ public class BeerServiceJPA implements BeerService {
 
     private static final int DEFAULT_PAGE_NUMBER = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
+    private static final int MAX_PAGE_SIZE = 1000;
 
 /*    @Override
     public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
@@ -125,7 +126,7 @@ public class BeerServiceJPA implements BeerService {
 
         int queryPageNumber = (pageNumber != null && pageNumber > 0) ? pageNumber - 1 : DEFAULT_PAGE_NUMBER;
 
-        int queryPageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize > 1000 ? 1000 : pageSize;
+        int queryPageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
 
         Sort sort = Sort.by(Sort.Order.asc("beerName"));
 
