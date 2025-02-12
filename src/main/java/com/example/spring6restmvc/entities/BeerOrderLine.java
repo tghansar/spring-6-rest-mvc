@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * @author : Taariq
  * @mailto : tghansar@gmail.com
- * @created : 2023/09/21, Thu, 09:59
+ * @created : 2025/01/21, Tue, 15:12
  **/
 
 @Entity
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class BeerOrderLine {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
@@ -27,22 +27,23 @@ public class Customer {
     private UUID id;
 
     @Version
-    @Column(name = "version")
     private Integer version;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name="beer_id")
+    private String beerId;
 
-    @Column(name = "email", length = 255)
-    private String email;
-
-    @Column(name = "surname")
-    private String surname;
-
-    @Column(name = "created_date", columnDefinition = "timestamp", updatable = false)
+    @Column(name = "created_date", columnDefinition = "timestamp")
     private LocalDateTime createdDate;
 
     @Column(name = "update_date", columnDefinition = "timestamp")
     private LocalDateTime updateDate;
-}
 
+    @Column(name="order_quantity")
+    private Integer orderQuantity;
+
+    @Column(name="quantity_allocated")
+    private Integer quantityAllocated;
+
+    @Column(name="beer_order_id")
+    private String beerOrderId;
+}

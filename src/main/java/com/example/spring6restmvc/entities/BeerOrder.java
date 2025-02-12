@@ -5,12 +5,11 @@ import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * @author : Taariq
  * @mailto : tghansar@gmail.com
- * @created : 2023/09/21, Thu, 09:59
+ * @created : 2025/01/21, Tue, 14:37
  **/
 
 @Entity
@@ -19,30 +18,22 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class BeerOrder {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID id;
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
+    private Long id;
 
     @Version
-    @Column(name = "version")
     private Integer version;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name="customer_ref")
+    private String customerRef;
 
-    @Column(name = "email", length = 255)
-    private String email;
-
-    @Column(name = "surname")
-    private String surname;
-
-    @Column(name = "created_date", columnDefinition = "timestamp", updatable = false)
+    @Column(name = "created_date", columnDefinition = "timestamp")
     private LocalDateTime createdDate;
 
     @Column(name = "update_date", columnDefinition = "timestamp")
     private LocalDateTime updateDate;
 }
-

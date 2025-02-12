@@ -26,13 +26,11 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Beer {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
     @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
-//    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 
     @Version
@@ -62,7 +60,7 @@ public class Beer {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "created_date", columnDefinition = "timestamp")
+    @Column(name = "created_date", columnDefinition = "timestamp", updatable = false)
     private LocalDateTime createdDate;
 
     @Column(name = "update_date", columnDefinition = "timestamp")
