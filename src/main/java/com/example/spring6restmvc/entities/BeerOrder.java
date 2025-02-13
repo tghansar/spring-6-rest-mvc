@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author : Taariq
@@ -36,4 +37,8 @@ public class BeerOrder {
 
     @Column(name = "update_date", columnDefinition = "timestamp")
     private LocalDateTime updateDate;
+
+    @OneToMany(mappedBy = "beerOrder", cascade = CascadeType.ALL)
+    @Column(name = "beer_order_lines")
+    private List<BeerOrderLine> beerOrderLines;
 }

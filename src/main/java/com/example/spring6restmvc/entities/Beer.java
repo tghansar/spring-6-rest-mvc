@@ -12,6 +12,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -65,4 +66,8 @@ public class Beer {
 
     @Column(name = "update_date", columnDefinition = "timestamp")
     private LocalDateTime updateDate;
+
+    @OneToMany(mappedBy = "beer", cascade = CascadeType.ALL)
+    @Column(name = "beer_order_lines")
+    private List<BeerOrderLine> beerOrderLines;
 }
