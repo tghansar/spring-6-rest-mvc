@@ -2,9 +2,10 @@ package com.example.spring6restmvc.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.*;
+import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -20,38 +21,35 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BeerOrderLine {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @Column(name = "id", length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
 
     @Version
-    private Integer version;
+    private Long version;
 
-    @Column(name="beer_id")
-    private String beerId;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp createdDate;
 
-    @Column(name = "created_date", columnDefinition = "timestamp")
-    private LocalDateTime createdDate;
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
 
-    @Column(name = "update_date", columnDefinition = "timestamp")
-    private LocalDateTime updateDate;
-
-    @Column(name="order_quantity")
-    private Integer orderQuantity;
-
-    @Column(name="quantity_allocated")
-    private Integer quantityAllocated;
-
-    @Column(name="beer_order_id")
-    private String beerOrderId;
+    public boolean isNew() {
+        return this.id == null;
+    }
 
     @ManyToOne
     @JoinColumn(name= "beer_order_id")
     private BeerOrder beerOrder;
 
     @ManyToOne
-    @JoinColumn(name = "beer_id")
     private Beer beer;
+
+    private Integer orderQuantity = 0;
+    private Integer quantityAllocated = 0;
 }

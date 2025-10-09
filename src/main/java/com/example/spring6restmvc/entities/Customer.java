@@ -2,9 +2,13 @@ package com.example.spring6restmvc.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -27,22 +31,23 @@ public class Customer {
     private UUID id;
 
     @Version
-    @Column(name = "version")
     private Integer version;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "email", length = 255)
+    @Column(length = 255)
     private String email;
 
-    @Column(name = "surname")
     private String surname;
 
-    @Column(name = "created_date", columnDefinition = "timestamp", updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdDate;
 
-    @Column(name = "update_date", columnDefinition = "timestamp")
+    @UpdateTimestamp
     private LocalDateTime updateDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "customer")
+    private Set<BeerOrder> beerOrders = new HashSet<>();
 }
 

@@ -128,7 +128,7 @@ public class BeerServiceJPA implements BeerService {
 
         int queryPageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
 
-        Sort sort = Sort.by(Sort.Order.asc("beerName"));
+        Sort sort = Sort.by(Sort.Order.asc("beerName"), Sort.Order.desc("beerStyle"));
 
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
