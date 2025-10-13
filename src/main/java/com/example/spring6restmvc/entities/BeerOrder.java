@@ -39,8 +39,8 @@ public class BeerOrder {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.UUID)
+    @Column(updatable = false, nullable = false)
     private UUID id;
 
     @Version

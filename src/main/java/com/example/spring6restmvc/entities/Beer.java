@@ -28,8 +28,8 @@ public class Beer {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
-    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.UUID)
     private UUID id;
 
     @Version
