@@ -4,13 +4,13 @@ import com.example.spring6restmvc.enums.BeerStyle;
 import com.example.spring6restmvc.exception.NotFoundException;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.services.BeerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -31,9 +31,8 @@ public class BeerController {
 
     public static String BEER_PATH = "/api/v1/beer";
 
-//    @RequestMapping(method = RequestMethod.POST)
     @PostMapping
-    public ResponseEntity createBeer(@Validated @RequestBody BeerDto beerDto) {
+    public ResponseEntity createBeer(@Valid @RequestBody BeerDto beerDto) {
 
         BeerDto savedBeerDto = beerService.saveNewBeer(beerDto);
 
@@ -60,7 +59,7 @@ public class BeerController {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDto beerDto) {
+    public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDto beerDto) {
 
         beerService.updateBeerById(beerId, beerDto);
 

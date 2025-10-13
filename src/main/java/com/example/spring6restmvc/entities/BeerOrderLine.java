@@ -44,7 +44,6 @@ public class BeerOrderLine {
     }
 
     @ManyToOne
-    @JoinColumn(name= "beer_order_id")
     private BeerOrder beerOrder;
 
     @ManyToOne
