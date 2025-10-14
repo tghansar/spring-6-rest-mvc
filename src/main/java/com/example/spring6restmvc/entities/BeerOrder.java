@@ -26,14 +26,14 @@ import java.util.UUID;
 public class BeerOrder {
 
     public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
-                     String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines) {
+                     String customerRef, Set<BeerOrderLine> beerOrderLines, Customer customer) {
         this.id = id;
         this.version = version;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
         this.customerRef = customerRef;
-        this.setCustomer(customer);
         this.beerOrderLines = beerOrderLines;
+        this.setCustomer(customer);
     }
 
     @Id
@@ -59,11 +59,11 @@ public class BeerOrder {
 
     private String customerRef;
 
-    @ManyToOne
-    private Customer customer;
-
     @OneToMany(mappedBy = "beerOrder")
     private Set<BeerOrderLine> beerOrderLines;
+
+    @ManyToOne
+    private Customer customer;
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
