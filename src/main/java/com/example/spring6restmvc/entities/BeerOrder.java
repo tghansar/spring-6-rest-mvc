@@ -26,7 +26,8 @@ import java.util.UUID;
 public class BeerOrder {
 
     public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
-                     String customerRef, Set<BeerOrderLine> beerOrderLines, Customer customer) {
+                     String customerRef, Set<BeerOrderLine> beerOrderLines, Customer customer,
+                     BeerOrderShipment beerOrderShipment) {
         this.id = id;
         this.version = version;
         this.createdDate = createdDate;
@@ -34,6 +35,7 @@ public class BeerOrder {
         this.customerRef = customerRef;
         this.beerOrderLines = beerOrderLines;
         this.setCustomer(customer);
+        this.setBeerOrderShipment(beerOrderShipment);
     }
 
     @Id
@@ -53,10 +55,6 @@ public class BeerOrder {
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
 
-    public boolean isNew() {
-        return this.id == null;
-    }
-
     private String customerRef;
 
     @OneToMany(mappedBy = "beerOrder")
@@ -65,9 +63,20 @@ public class BeerOrder {
     @ManyToOne
     private Customer customer;
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private BeerOrderShipment beerOrderShipment;
+
+    public boolean isNew() {
+        return this.id == null;
+    }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
         customer.getBeerOrders().add(this);
     }
 
+    public void setBeerOrderShipment(BeerOrderShipment beerOrderShipment) {
+        this.beerOrderShipment = beerOrderShipment;
+        beerOrderShipment.setBeerOrder(this);
+    }
 }
