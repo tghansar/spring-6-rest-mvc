@@ -24,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/beer") //<- path parameter
+@RequestMapping("api/v1/beers") //<- path parameter
 public class BeerController {
 
     private final BeerService beerService;
